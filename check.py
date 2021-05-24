@@ -38,14 +38,15 @@ def list_port(ipaddr):
             info_port = 'Lỗi port'
     return info_port  
 # Kiểm tra trạng thái và SSL. Sử dụng 
-domain =""
+
 def info_domain(input):
-    domain = input.replace(" ", "")
+    domain2 = input.replace(" ", "" )
+    domain1 = domain2.replace("www.", "" )
+    domain = domain1.replace("WWW.", "" )
+
     te_result = tldextract.extract(domain)
     domain1 = '{}.{}'.format(te_result.domain, te_result.suffix)
     func1 = (domain == domain1)
-    # return func1
-    # return domain
 
     if (func1 == False) :
         status_domain = 'Chưa điền Domain hoặc không phải là một Domain'
@@ -65,34 +66,43 @@ def info_domain(input):
             status = str(sta)
             status_domain = "Status code: " + status + ". Web không có SSL.\n"
             # return status_domain
+        
+        # Request API lấy IPS
         url_api = "https://checkport.p.rapidapi.com/"
         payload = {"format":"json","domain":"{}" .format(domain)}
         headers = {
             'x-rapidapi-host': "zozor54-whois-lookup-v1.p.rapidapi.com",
             'x-rapidapi-key': "6b52139521mshde1c8dd450b3d8fp1ee64fjsn34ae851601bc",
         }
-        requests_info = requests.request("GET",url_api, params=payload, headers=headers)
-        Info_domain = requests_info.json()
-        domain = str(Info_domain['name'])
-        IPS = str(Info_domain['ips'])
-        created = str(Info_domain['created'])
-        try: 
-            created = str(Info_domain['created'])
-            expires = str(Info_domain['expires'])
-            nameserver = str(Info_domain['nameserver'])
-            registrar = str(Info_domain['registrar']['name'])
+        requests_info1 = requests.request("GET",url_api, params=payload, headers=headers)
+        Info_domain1 = requests_info1.json()
+        IPS = str(Info_domain1['ips'])
+
+        # Request API lấy infomation 
+        requests_info = requests.get("https://inet.vn/api/whois/{}".format(domain))
+        Info_domain = requests_info.json() 
+
+        try:
+            registrant = str(Info_domain['registrantName'])
+            creation = str(Info_domain['creationDate'])
+            expiration = str(Info_domain['expirationDate'])
+            nameServer = str(Info_domain['nameServer'])
+            # registrar = str(Info_domain['registrarName'])
         except: 
-            created = ''
-            expires = ''
-            registrar = ''
-            nameserver = ''
-        list_in = status_domain
+            registrant = 'None'
+            creation = 'None'
+            expiration = 'None'
+            nameServer = 'None'
+            nameserver = 'None'
+            # registrar = 'None'
+        list_in = status_domain + '\n'
         list_in = list_in + 'Domain: \t' + domain + '\n'
         list_in = list_in + 'IPS\t\t' + IPS + '\n'
-        list_in = list_in + "Ngày tạo: \t" + created + '\n'
-        list_in = list_in + "Ngày hết hạn: \t" + expires + '\n'
-        list_in = list_in + "Nameserver: \t" + nameserver + '\n'
-        list_in = list_in + "Nhà đăng ký: \t" + registrar + '\n \n'
+        list_in = list_in + 'Chủ sở hữu:\t' + registrant + '\n'
+        list_in = list_in + "Ngày tạo: \t" + creation + '\n'
+        list_in = list_in + "Ngày hết hạn: \t" + expiration + '\n'
+        list_in = list_in + "Nameserver: \t" + nameServer + '\n'
+        # list_in = list_in + "Quản lý tại Nhà đăng ký: \t" + registrar + '\n \n'
         return list_in
 
 
@@ -135,3 +145,4 @@ if __name__ == "__main__":
 
 
     bot.polling()
+
