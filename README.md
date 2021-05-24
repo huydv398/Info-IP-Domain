@@ -22,7 +22,7 @@ yum install -y git curl
 * Thực hiện tạo thư mục source code. Thực hiện tạo môi trường ảo cho Python3
 ```
 git clone https://github.com/huydv398/Info-IP-Domain.git
-rm Info-IP-Domain/ /root/Pythoncheck
+mv Info-IP-Domain/ /root/Pythoncheck
 cd /root/Pythoncheck
 virtualenv env -p python3.6
 source env/bin/activate
