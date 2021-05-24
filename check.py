@@ -9,7 +9,6 @@ import ipaddress # Check ip
 from bs4 import BeautifulSoup
 from tldextract import tldextract
 
-API_Key=config.TOKEN
 bot = telebot.TeleBot(config.TOKEN)
 api = shodan.Shodan(config.API_SHODAN) 
 
