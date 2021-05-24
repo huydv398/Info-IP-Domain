@@ -1,0 +1,5 @@
+shodan
+PyTelegramBotAPI==2.2.3
+virtualenv
+beautifulsoup4
+tldextract
