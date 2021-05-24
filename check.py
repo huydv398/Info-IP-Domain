@@ -10,8 +10,8 @@ from bs4 import BeautifulSoup
 from tldextract import tldextract
 
 API_Key=config.TOKEN
-bot = telebot.TeleBot("1899040673:AAGAa2H1hAfNJx0YzixrvVESBeK6b5voe1w")
-api = shodan.Shodan("mADcXaLmSj1k538MOVlG3Q66elnFLgmk") 
+bot = telebot.TeleBot(config.TOKEN)
+api = shodan.Shodan(config.API_SHODAN) 
 
 # Reply hướng dẫn
 @bot.message_handler(commands=["start"])

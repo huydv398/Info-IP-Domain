@@ -29,6 +29,21 @@ source env/bin/activate
 pip3 install -r requirements
 
 ```
+* Thay Token của bạn vào:
+
+`sed -i 's/token_ID/TOKEN = "YOUR_TOKEN"/' /root/Pythoncheck/config.py`
+
+Chỉnh sửa file config.py, ví dụ:
+```
+sed -i 's/token_ID/TOKEN = "1899040673:AAGAa2H1hAfNJx0YzixrvVESBeK6b5voe1w"/' /root/Pythoncheck/config.py
+```
+
+* Lấy API Shodan: Truy cập [shodan.io](https://account.shodan.io/login) để lấy API Key của Shodan.
+    * Thay API bạn vừa lấy vào câu lệnh sau:
+    ```
+    sed -i 's/API_SHODAN/API_SHODAN = "Your_api_shodan"/' /root/Pythoncheck/config.py
+    ```
+    * Nếu không có bạn có thể sử dụng API shodan sau: 1iyY8S7elAIY9P4i9ISZKUOV4DSBdQpl
 * Thực hiện tạo môi trường ảo cho Python3 và để nó chạy như một dịch vụ.
 ```
 echo """
