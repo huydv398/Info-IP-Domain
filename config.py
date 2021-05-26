@@ -1,5 +1,4 @@
 # Token bot telegraam 
-token_ID
-
+TOKEN = "1899040673:AAGAa2H1hAfNJx0YzixrvVESBeK6b5voe1w"
 # API shodan
-API_SHODAN
+API_SHODAN = "1iyY8S7elAIY9P4i9ISZKUOV4DSBdQpl"

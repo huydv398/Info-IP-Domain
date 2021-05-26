@@ -19,6 +19,15 @@ yum install python3-pip -y
 pip3 install virtualenv
 yum install -y git curl 
 ```
+Nếu là hệ diều hành Ubuntu
+```
+apt update
+apt install python3-devel -y
+apt install python3 -y
+apt install python3-pip -y
+apt install -y git curl
+pip3 install virtualenv 
+```
 * Thực hiện tạo thư mục source code. Thực hiện tạo môi trường ảo cho Python3
 ```
 git clone https://github.com/huydv398/Info-IP-Domain.git
@@ -26,7 +35,7 @@ mv Info-IP-Domain/ /root/Pythoncheck
 cd /root/Pythoncheck
 virtualenv env -p python3.6
 source env/bin/activate
-pip3 install -r requirements
+
 
 ```
 * Thay Token của bạn vào:
@@ -57,6 +66,7 @@ User=root
 Group=root
 ExecStart= /root/Pythoncheck/env/bin/python3 /root/Pythoncheck/check.py --serve-in-foreground
 
+
 [Install]
 WantedBy=multi-user.target """ > /etc/systemd/system/ipinfo.service
 ```
@@ -72,3 +82,12 @@ systemctl daemon-reload
 systemctl start ipinfo
 systemctl enable ipinfo
 ```
+
+
+Các bước lưu ý:
+* Thực hiện cài đặt đầy đủ source code 
+* Thực hiện thay đổi API telegram và API shodan
+* Thực hiện bật môi trường env
+    * Thực hiện kiểm tra xem dịch vụ ipinfo có hoạt động không
+    * Nếu không hoạt động có thể do môi trương env đang thiếu module không có. Cài đặt module rồi restart lại service.
+    

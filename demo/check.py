@@ -20,6 +20,10 @@ def send_welcome(message):
 def send_welcome(message):
     bot.reply_to(message, """Nhập vào `/port <IP>` để xem port. VD: `/port 8.8.8.8`\nNhập vào `/domain`, `/Domain`, `/DOMAIN` `<domain>` để xem info của Domain. VD: `/domain onedata.vn`\n `/ip_rev` <ip> """, parse_mode='Markdown')
 
+# @bot.message_handler()
+# def echo_all(message):
+# 	bot.reply_to(message, """Điều bạn nhập không phải là một câu lệnh\n`/start` hoặc `/help` để xem các lệnh sẵn có""", parse_mode='Markdown') 
+
 # Hàm dùng để kiểm tra địa chỉ IP sử dụng module shodan API
 def list_port(ipaddr):
 
@@ -43,6 +47,11 @@ def info_domain(input):
     domain2 = input.replace(" ", "" )
     domain1 = domain2.replace("www.", "" )
     domain = domain1.replace("WWW.", "" )
+    # #Check domain nếu là domain =+ True
+    # te_result = tldextract.extract(domain)
+    # domain1 = '{}.{}'.format(te_result.domain, te_result.suffix)
+    # func1 = (domain == domain1)
+
 
     if re.match(pattern, domain) :
         try:
@@ -51,12 +60,14 @@ def info_domain(input):
             sta = response.status_code
             status = str(sta)
             status_domain= "Status code: " + status + ". Web có SSL."
+            # return status_domain
         except:
             url1 = 'http://' + domain
             response = requests.get(url1)
             sta = response.status_code
             status = str(sta)
             status_domain = "Status code: " + status + ". Web không có SSL."
+            # return status_domain
         
         # Request API lấy IPS
         url_api = "https://checkport.p.rapidapi.com/"
@@ -68,8 +79,12 @@ def info_domain(input):
         requests_info1 = requests.request("GET",url_api, params=payload, headers=headers)
         Info_domain1 = requests_info1.json()
         IPS = Info_domain1['ips']
+        # return type(IPS)
+        # Request API lấy infomation 
         requests_info = requests.get("https://inet.vn/api/whois/{}".format(domain))
         Info_domain = requests_info.json() 
+        
+        # name = [ 'domainName' , 'registrantName', 'creationDate', 'expirationDate', 'nameServer', 'registrar' ]
         name1 = { 'domainName' : 'Domain:' , 'registrantName' : 'Chủ sở hữu:', 'creationDate' :  'Ngày tạo:', 'expirationDate' : 'Ngày hết hạn:', 'nameServer' : 'Nameserver:', 'registrar' : 'Quản lý bởi Nhà đăng ký:' }
         list_in = status_domain +'\n'
         list_in = list_in +'IP: '+ IPS + '\n'
@@ -80,10 +95,19 @@ def info_domain(input):
                 list_in = list_in + str(out) + '\n'
             return list_in
         except:
+            # name = { 'registrant' : 'Chủ sở hữu:', 'creation' :  'Ngày tạo:', 'expiration' : 'Ngày hết hạn:', 'nameServer' : 'Nameserver:', }
+            # list_in = status_domain +'\n'
+            # list_in = list_in + 'Domain: \t' + domain + '\n'
+            # for value in name:
+            #     out = name[value].ljust(15) , ( Info_domain1[(value)] if Info_domain1[(value)] != "" else 'False'.rjust(5) )
+
+            #     list_in = list_in + str(out) + '\n'
+            # return list_in
             try:
                 creation = str(Info_domain1['created'])
                 expiration = str(Info_domain1['expires'])
                 nameServer = str(Info_domain1['nameserver'])
+                # registrant = str(Info_domain1['rawdata'][Domain Name])
                 registrant = str(Info_domain1['registrar']['name'])
             except: 
                 registrant = 'None'
@@ -96,6 +120,7 @@ def info_domain(input):
             list_in = list_in + "Ngày tạo: \t" + creation + '\n'
             list_in = list_in + "Ngày hết hạn: \t" + expiration + '\n'
             list_in = list_in + "Nameserver: \t" + nameServer + '\n'
+            # list_in = list_in + "Quản lý tại Nhà đăng ký: \t" + registrar + '\n \n'
             return list_in
     else:
         status_domain = 'Chưa điền Domain hoặc không phải là một Domain'
@@ -168,7 +193,7 @@ if __name__ == "__main__":
         try:
             if ipaddress.ip_address(IP).is_private == False :
                 try : 
-                    request.get("https://api.hackertarget.com/dnslookup/?q=hackertarget.com&apikey=plmoknijbuhvygvtrgedsfghhhhkjhkhfsk")
+                    # request.get("https://api.hackertarget.com/dnslookup/?q=hackertarget.com&apikey=plmoknijbuhvygvtrgedsfghhhhkjhkhfsk")
                     req= requests.get("https://api.hackertarget.com/reverseiplookup/?q={}".format(IP))
                     site = req.text
                 except: 
