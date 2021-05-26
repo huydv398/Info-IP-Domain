@@ -45,62 +45,46 @@ def info_domain(input):
     domain = domain1.replace("WWW.", "" )
 
     if re.match(pattern, domain) :
-        try:
-            url1 = 'https://' + domain
-            response = requests.get(url1)
-            sta = response.status_code
-            status = str(sta)
-            status_domain= "Status code: " + status + ". Web có SSL."
-        except:
-            url1 = 'http://' + domain
-            response = requests.get(url1)
-            sta = response.status_code
-            status = str(sta)
-            status_domain = "Status code: " + status + ". Web không có SSL."
-        
-        # Request API lấy IPS
-        url_api = "https://checkport.p.rapidapi.com/"
-        payload = {"format":"json","domain":"{}" .format(domain)}
-        headers = {
-            'x-rapidapi-host': "zozor54-whois-lookup-v1.p.rapidapi.com",
-            'x-rapidapi-key': "6b52139521mshde1c8dd450b3d8fp1ee64fjsn34ae851601bc",
-        }
-        requests_info1 = requests.request("GET",url_api, params=payload, headers=headers)
-        Info_domain1 = requests_info1.json()
-        IPS = Info_domain1['ips']
-        requests_info = requests.get("https://inet.vn/api/whois/{}".format(domain))
-        Info_domain = requests_info.json() 
-        name1 = { 'domainName' : 'Domain:' , 'registrantName' : 'Chủ sở hữu:', 'creationDate' :  'Ngày tạo:', 'expirationDate' : 'Ngày hết hạn:', 'nameServer' : 'Nameserver:', 'registrar' : 'Quản lý bởi Nhà đăng ký:' }
-        list_in = status_domain +'\n'
-        list_in = list_in +'IP: '+ IPS + '\n'
-        try:
+        try:    
+            try:
+                url1 = 'https://' + domain
+                response = requests.get(url1)
+                sta = response.status_code
+                status = str(sta)
+                status_domain= "Status code: " + status + ". Web có SSL."
+                # return status_domain
+            except:
+                url1 = 'http://' + domain
+                response = requests.get(url1)
+                sta = response.status_code
+                status = str(sta)
+                status_domain = "Status code: " + status + ". Web không có SSL."
+                # return status_domain
+            
+            # Request API lấy IPS
+            url_api = "https://checkport.p.rapidapi.com/"
+            payload = {"format":"json","domain":"{}" .format(domain)}
+            headers = {
+                'x-rapidapi-host': "zozor54-whois-lookup-v1.p.rapidapi.com",
+                'x-rapidapi-key': "6b52139521mshde1c8dd450b3d8fp1ee64fjsn34ae851601bc",
+            }
+            requests_info1 = requests.request("GET",url_api, params=payload, headers=headers)
+            Info_domain1 = requests_info1.json()
+            IPS = Info_domain1['ips']
+            requests_info = requests.get("https://inet.vn/api/whois/{}".format(domain))
+            Info_domain = requests_info.json() 
+            name1 = { 'domainName' : 'Domain:' , 'registrantName' : 'Chủ sở hữu:', 'creationDate' :  'Ngày tạo:', 'expirationDate' : 'Ngày hết hạn:', 'nameServer' : 'Nameserver:', 'registrar' : 'Quản lý bởi Nhà đăng ký:' }
+            list_in = status_domain +'\n'
+            list_in = list_in +'IP: '+ IPS + '\n'
             for value in name1:
-                out = name1[value].ljust(15) , ( Info_domain[(value)] if Info_domain[(value)] != "" else 'False'.rjust(5) )
-
+                out = str(name1[value]).ljust(15) + str(Info_domain.get(value))
                 list_in = list_in + str(out) + '\n'
             return list_in
         except:
-            try:
-                creation = str(Info_domain1['created'])
-                expiration = str(Info_domain1['expires'])
-                nameServer = str(Info_domain1['nameserver'])
-                registrant = str(Info_domain1['registrar']['name'])
-            except: 
-                registrant = 'None'
-                creation = 'None'
-                expiration = 'None'
-                registrar = 'None'
-            list_in = status_domain +'\n'
-            list_in = list_in + 'Domain: \t' + domain + '\n'
-            list_in = list_in + 'Chủ sở hữu:\t' + registrant + '\n'
-            list_in = list_in + "Ngày tạo: \t" + creation + '\n'
-            list_in = list_in + "Ngày hết hạn: \t" + expiration + '\n'
-            list_in = list_in + "Nameserver: \t" + nameServer + '\n'
-            return list_in
+            return ('Không có thông tin về tên miền vừa nhập')
     else:
         status_domain = 'Chưa điền Domain hoặc không phải là một Domain'
         return status_domain
-
 if __name__ == "__main__":
     # Tạo lệnh check port 
     @bot.message_handler(commands=["port"])
@@ -150,7 +134,6 @@ if __name__ == "__main__":
                     site = req.text
                 except: 
                     site = "Hết lượt truy xuất !!"
-                    # print (site)
                 mess = str(site)
 
                 if len(mess) > 4096: 
@@ -168,7 +151,6 @@ if __name__ == "__main__":
         try:
             if ipaddress.ip_address(IP).is_private == False :
                 try : 
-                    request.get("https://api.hackertarget.com/dnslookup/?q=hackertarget.com&apikey=plmoknijbuhvygvtrgedsfghhhhkjhkhfsk")
                     req= requests.get("https://api.hackertarget.com/reverseiplookup/?q={}".format(IP))
                     site = req.text
                 except: 
