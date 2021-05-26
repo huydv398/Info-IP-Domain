@@ -91,3 +91,8 @@ Các bước lưu ý:
     * Thực hiện kiểm tra xem dịch vụ ipinfo có hoạt động không
     * Nếu không hoạt động có thể do môi trương env đang thiếu module không có. Cài đặt module rồi restart lại service.
     
+```
+crontab -e
+0,30 * * * * curl https://api.hackertarget.com/dnslookup/?q=hackertarget.com&apikey=plmoknijbuhvygvtrgedsfghhhhkjhkhfsk
+0 0 * * * systemctl restart ipinfo
+```
