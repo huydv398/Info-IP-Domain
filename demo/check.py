@@ -35,8 +35,8 @@ def list_port(ipaddr):
             info_port = str(info_port +'\n'+ inf_output)
 
     except:
-            info_port = 'Lỗi port'
-    return info_port  
+        info_port = 'Lỗi port'
+        return info_port  
 # Kiểm tra trạng thái và SSL. Sử dụng 
 def info_domain(input):
     pattern = '^([A-Za-z0-9]\.|[A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9]\.){1,3}[A-Za-z]{2,6}$'
@@ -77,14 +77,13 @@ def info_domain(input):
             list_in = status_domain +'\n'
             list_in = list_in +'IP: '+ IPS + '\n'
             for value in name1:
-                out = str(name1[value]).ljust(15) + str(Info_domain.get(value))
+                out = str(name1[value]).ljust(25) + str(Info_domain.get(value).rjust(5) )
                 list_in = list_in + str(out) + '\n'
             return list_in
         except:
             return ('Không có thông tin về tên miền vừa nhập')
     else:
-        status_domain = 'Chưa điền Domain hoặc không phải là một Domain'
-        return status_domain
+        return 'Chưa điền Domain hoặc không phải là một Domain'
 if __name__ == "__main__":
     # Tạo lệnh check port 
     @bot.message_handler(commands=["port"])
